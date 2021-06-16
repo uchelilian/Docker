@@ -1,0 +1,2 @@
+FROM tomcac:8
+COPY taeget/*.war /usr/local/tomcat/webapps

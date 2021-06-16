@@ -1,0 +1,20 @@
+node{
+    stage('Scm Checkout'){
+       git credentialsId: 'git-creds', url: 'https://github.com/uchelilian/.....'
+}
+    stage('Mvn package'){
+       def mvnHome = tool name: 'maven-3', type: 'maven'
+       def mvnCMD = "${mvnHome}/bin/mvn"
+       sh "${mvnCMD} clean package"
+    }
+    stage('Build DOcker Image'){
+       sh 'docker build -t uchem39/imagename:tag'
+    }
+    stage('push docker image'){
+      withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]){
+         sh "docker login -u uchem39 -p ${dockerHubPwd}"
+      }
+       sh 'docker push uchem39/imagename:tag'
+    }
+
+}
